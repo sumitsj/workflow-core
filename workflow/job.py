@@ -52,6 +52,13 @@ class Job:
             "processes": [process.to_json() for process in self.processes]
         }
         return json.dumps(dict_representation, default=lambda o: o.__dict__, indent=4)
+    
+    @staticmethod
+    def parse(str):
+        job_dict = json.loads(str)
+        job = Job(id=job_dict["id"], name=job_dict["name"])
+        job.processes = Process.parse(job_dict["processes"])
+        return job
 
     def __raise_exception_if_process_list_is_empty(self):
         if(len(self.processes) == 0):
